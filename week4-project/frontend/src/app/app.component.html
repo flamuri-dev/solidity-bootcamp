@@ -1,0 +1,138 @@
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold">My Ballot Example</h1>
+  <div *ngIf="!wallet" class="col-lg-6 mx-auto">
+    <p>To use this ballot you need to connect a wallet</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      <button
+        (click)="createWallet()"
+        type="button"
+        class="btn btn-success btn-lg px-4 gap-3"
+      >
+        Create Wallet
+      </button>
+      <button
+        (click)="enableImport()"
+        type="button"
+        class="btn btn-info btn-lg px-4 gap-3"
+      >
+        Import Wallet
+      </button>
+      <button type="button" disabled class="btn btn-danger btn-lg px-4 gap-3">
+        Connect Wallet
+      </button>
+    </div>
+  </div>
+  <br />
+  <div *ngIf="importedEnabled" class="col-lg-6 mx-auto">
+    <input
+      class="form-control mb-4"
+      #importedAddress
+      type="text"
+      placeholder="Paste your Private Key here"
+    />
+    <button
+      (click)="importWallet(importedAddress.value)"
+      type="button"
+      class="btn btn-warning btn-lg px-4 gap-3"
+    >
+      Connect Imported Wallet
+    </button>
+  </div>
+  <div *ngIf="wallet" class="col-lg-6 mx-auto">
+    <p>You are connected to the wallet {{ wallet.address }}</p>
+    <p>This application uses the token at the address {{ tokenAddress }}</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      <div class="card">
+        <div class="card-body">My ether balance is: {{ etherBalance }}</div>
+      </div>
+      <div class="card">
+        <div class="card-body">My token balance is: {{ tokenBalance }}</div>
+      </div>
+      <div class="card">
+        <div class="card-body">My voting power is: {{ votePower }}</div>
+      </div>
+    </div>
+    <p class="my-4">Claim your tokens here :</p>
+    <button
+      (click)="claimTokens()"
+      type="button"
+      class="btn btn-success btn-lg px-4 gap-3"
+    >
+      Claim Tokens
+    </button>
+    <p class="my-4">
+      Paste here the address you want to delegate your votes here:
+    </p>
+    <div class="font-mono flex justify-center mt-4">
+      <input
+        #delegateAddress
+        type="text"
+        class="text-xs p-2 border rounded-md"
+      />
+    </div>
+    <br />
+    <button
+      (click)="delegate(delegateAddress.value)"
+      class="btn btn-success btn-lg py-2 px-4 gap-3"
+    >
+      Delegate
+    </button>
+    <p class="my-4">Connect to the ballot here :</p>
+    <input
+      class="form-control mb-4"
+      #ballotContractAddress
+      type="text"
+      placeholder="Paste contract address here"
+    /><br />
+    <button
+      (click)="connectBallot(ballotContractAddress.value)"
+      type="button"
+      class="btn btn-success btn-lg px-4 gap-3"
+    >
+      Connect Ballot
+    </button>
+    <div *ngIf="ballotContract" class="col-lg-6 py-2 mx-auto">
+      <p>
+        You are connected to the Ballot at the address:
+        {{ ballotContract.address }}
+      </p>
+      <p
+        *ngFor="let proposal of proposals; index as indexOfElement"
+        class="font-mono mb-2"
+      >
+        Proposal ID {{ indexOfElement }}: {{ proposal }}
+      </p>
+    </div>
+    <div *ngIf="ballotContract" class="col-lg-6 mx-auto">
+      <p class="my-4">Paste here the proposal ID you want to vote for here:</p>
+      <div class="font-mono flex justify-center mt-4">
+        <input
+          #vote
+          type="text"
+          class="text-xs p-2 border rounded-md"
+          placeholder="Proposal ID"
+        />
+      </div>
+      <br />
+      <button
+        (click)="castVote(vote.value)"
+        class="btn btn-success btn-lg py-2 px-4 gap-3"
+      >
+        Vote
+      </button>
+    </div>
+    <br />
+    <div>
+      <button
+        *ngIf="ballotContract"
+        (click)="getWinner()"
+        class="btn btn-success btn-lg py-2 px-4 gap-3"
+      >
+        Get Winner
+      </button>
+      <p *ngIf="winner" class="font-mono text-lg mb-4">
+        The winner is: {{ winner }}
+      </p>
+    </div>
+  </div>
+</div>
