@@ -1,0 +1,255 @@
+<div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold">My Lottery Example</h1>
+  <div *ngIf="!signer" class="col-lg-6 mx-auto">
+    <p>To use this lottery you need to connect a wallet</p>
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      <button
+        (click)="createWallet()"
+        type="button"
+        class="btn btn-success btn-lg px-4 gap-3"
+      >
+        Create Wallet
+      </button>
+      <button
+        (click)="enableImport()"
+        type="button"
+        class="btn btn-info btn-lg px-4 gap-3"
+      >
+        Import Wallet
+      </button>
+      <button
+        (click)="connectWallet()"
+        type="button"
+        class="btn btn-danger btn-lg px-4 gap-3"
+      >
+        Connect Wallet
+      </button>
+    </div>
+
+    <br />
+    <div *ngIf="importedEnabled" class="col-lg-6 mx-auto">
+      <input
+        class="form-control mb-4"
+        #importedAddress
+        type="text"
+        placeholder="Paste your Private Key here"
+      />
+      <button
+        (click)="importWallet(importedAddress.value)"
+        type="button"
+        class="btn btn-warning btn-lg px-4 gap-3"
+      >
+        Connect Imported Wallet
+      </button>
+    </div>
+  </div>
+  <div *ngIf="signer" class="col-lg-6 mx-auto">
+    <div class="card text-center">
+      <div class="card-header">
+        A Lottery Smart Contract developed for Encode.club Bootcamp
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          You are connected to the wallet {{ signerAddress }}
+        </p>
+        <p class="card-text">
+          This application uses the lottery tokens at the address
+          {{ tokenAddress }}
+        </p>
+      </div>
+    </div>
+    <br />
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+      <div class="card">
+        <div class="card-body">My ether balance is: {{ etherBalance }}</div>
+      </div>
+      <div class="card">
+        <div class="card-body">My LT0 token balance is: {{ tokenBalance }}</div>
+      </div>
+    </div>
+    <div *ngIf="lotteryContract" class="col-lg-10 py-4 mx-auto">
+      <div class="card text-center">
+        <div class="card-body">
+          <p class="card-text">
+            You are connected to the Lottery at the address
+            {{ lotteryContract.address }}
+          </p>
+          <p class="card-text">
+            You need LT0 Tokens to participate, insert the tokens number you
+            want to purchase here:
+          </p>
+          <div class="font-mono flex justify-center mt-4">
+            <input
+              #tokenAmount
+              type="text"
+              class="text-xs p-2 border rounded-md"
+            />
+          </div>
+          <p class="my-4">Click here to complete the purchase:</p>
+          <button
+            (click)="buyTokens(tokenAmount.value)"
+            type="button"
+            class="btn btn-success btn-lg px-4 gap-3"
+          >
+            Purchase Tickets
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="lotteryContract" class="col-lg-10 py-2 mx-auto">
+      <div class="card text-center">
+        <div class="card-body">
+          <p class="font-mono bg-danger py-2 text-white mb-4">
+            The Lottery is: {{ lotteryState }}
+          </p>
+
+          <div class="col-lg-10 mx-auto">
+            <p class="my-4">Open or Close Lottery Here:</p>
+            <div>
+              <button
+                *ngIf="!betsOpened"
+                (click)="openBets('600')"
+                type="button"
+                class="btn btn-primary"
+              >
+                Open Bets
+              </button>
+              <button
+                *ngIf="betsOpened"
+                (click)="closeLottery()"
+                type="button"
+                class="btn btn-secondary"
+              >
+                Close Lottery
+              </button>
+              <p class="my-4">
+                You can open the bets only if you are the Owner
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="lotteryContract"
+      class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4 mx-auto"
+    >
+      <div class="card px-1 p-2 bg-light col-sm-4">
+        <div class="card-body">Owner Pool: {{ ownerPool }}</div>
+      </div>
+      <div class="card px-1 p-2 bg-light col-sm-4">
+        <div class="card-body">Your Token Prize: {{ yourPrize }}</div>
+      </div>
+    </div>
+
+    <br />
+
+    <div
+      *ngIf="this.betsOpened || this.tokenBalance"
+      class="card text-white bg-primary mb-3 mx-auto"
+      style="max-width: 20rem"
+    >
+      <div class="card-header">Lottery Controls</div>
+      <div class="card-body">
+        <h5 class="card-title">
+          Use the inputs here to bet or burn your lottery tickets!
+        </h5>
+
+        <div *ngIf="this.betsOpened" class="font-mono flex justify-center mt-4">
+          <input
+            type="text"
+            #tokensToBet
+            class="form-control"
+            placeholder="number of Tickets to bet"
+          />
+
+          <br />
+          <button
+            type="button"
+            (click)="bet(tokensToBet.value)"
+            class="btn btn-warning btn-lg px-4 gap-3"
+          >
+            Bet
+          </button>
+        </div>
+
+        <div
+          *ngIf="this.tokenBalance"
+          class="font-mono flex justify-center mt-4"
+        >
+          <input
+            type="text"
+            #tokensToReturn
+            class="form-control"
+            placeholder="number of Tickets to burn"
+          />
+
+          <br />
+          <button
+            type="button"
+            (click)="burnTokens(tokensToReturn.value)"
+            class="btn btn-warning btn-lg px-4 gap-3"
+          >
+            Burn Tickets
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      *ngIf="this.betsOpened"
+      class="d-grid gap-2 py-4 d-sm-flex justify-content-sm-center mt-3 mx-auto"
+    >
+      <div class="card px-2 p-2 bg-light col-sm-6">
+        <div class="card-body">Closing time: {{ closingTime }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="claimable"
+    class="card text-white bg-primary mb-3 mx-auto"
+    style="max-width: 20rem"
+  >
+    <div class="card-body">
+      <input
+        type="text"
+        #ticketsClaim
+        class="form-control"
+        placeholder="number of Tickets to claim"
+      />
+      <br />
+      <button
+        type="button"
+        (click)="claimPrize(ticketsClaim.value)"
+        class="btn btn-warning btn-lg px-4 gap-3"
+      >
+        Claim your Prize
+      </button>
+    </div>
+  </div>
+
+  <div
+    *ngIf="lotteryContract"
+    class="card text-white bg-primary mb-3 mx-auto"
+    style="max-width: 20rem"
+  >
+    <div class="card-body">
+      <input
+        type="text"
+        #amountToWithdraw
+        class="form-control"
+        placeholder="Amount to withdraw"
+      />
+      <br />
+      <button
+        type="button"
+        (click)="ownerWithdraw(amountToWithdraw.value)"
+        class="btn btn-warning btn-lg px-4 gap-3"
+      >
+        Withdraw
+      </button>
+    </div>
+  </div>
+</div>
