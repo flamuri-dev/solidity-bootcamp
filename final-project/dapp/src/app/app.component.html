@@ -28,8 +28,8 @@
 <div class="px-4 py-4 my-5 text-center">
   <h1 *ngIf="!signer" class="display-5 fw-bold">Welcomy</h1>
   <div *ngIf="!signer" class="col-lg-6 mx-auto">
-    <h2>web3 apartments rental manager</h2>
-    <p>to rent or reserve an apartment you need to connect a wallet</p>
+    <h4>Decentralized marketplace that connects people who want to rent out <br /> their homes with people who are looking for accommodation.</h4>
+    <p>Please connect your wallet.</p>
     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
       <button (click)="createWallet()" type="button" class="btn btn-success btn-lg px-4 gap-3">
         Create Wallet
@@ -54,8 +54,7 @@
   <div *ngIf="welcomyContract" class="col-lg-6 mx-auto">
     <div class="card text-center">
       <div class="card-header">
-        Web3 rental manager based on NFT developed for Encode.club
-        bootcamp
+        Web3 Property Rental Marketplace @ Encode Club
       </div>
       <div class="card-body">
         <p class="card-text">
@@ -75,7 +74,7 @@
         <div class="card-header">List Apartments</div>
         <div class="card-body">
           <h4 class="card-text">
-            Enter position and Price per Night:
+            Enter Coordinates and Price per Night:
           </h4>
           <div class="font-mono flex justify-center mt-4">
             <div class="py-2">
@@ -141,7 +140,7 @@
             <h2 class="card-text">Informations:</h2>
             <p class="card-text">
               You Rented Apartment Number:
-              {{ apartmentsRes[i] }}
+              {{ apartmentsRes[i] + 1 }}
             </p>
             <p class="card-text">Start Date: {{ startRes[i] }}</p>
             <p class="card-text">End Date: {{ endRes[i] }}</p>

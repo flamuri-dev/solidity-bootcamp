@@ -312,7 +312,7 @@ export class AppComponent {
     this.endRes = []
     reservations = []
     await Moralis.start({
-      apiKey: "MORALIS_API_KEY", // Change this to your Moralis API Key
+      apiKey: "8UzI05UVf79hWaeC3oxaibfTkcv8HAwa1galJd9Biwd1IY9O73khhQI1Thg2LyKN", // Change this to your Moralis API Key
     })
 
     const address = WELCOMY_ADDRESS
